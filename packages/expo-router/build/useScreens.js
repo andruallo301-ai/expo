@@ -201,11 +201,6 @@ function getQualifiedRouteComponent(value) {
         }
         (0, react_1.useEffect)(() => navigation.addListener('focus', () => {
             const state = navigation.getState();
-            // When navigating to a screen, remove the no animation param to re-enable animations
-            // Otherwise the navigation back would also have no animation
-            if ((0, navigationParams_1.hasParam)(route?.params, navigationParams_1.INTERNAL_EXPO_ROUTER_NO_ANIMATION_PARAM_NAME)) {
-                navigation.replaceParams((0, navigationParams_1.removeParams)(route?.params, [navigationParams_1.INTERNAL_EXPO_ROUTER_NO_ANIMATION_PARAM_NAME]));
-            }
             const isLeaf = !('state' in state.routes[state.index]);
             // Because setFocusedState caches the route info, this call will only trigger rerenders
             // if the component itself didn’t rerender and the route info changed.
@@ -214,6 +209,17 @@ function getQualifiedRouteComponent(value) {
             if (isLeaf && stateForPath)
                 store.setFocusedState(stateForPath);
         }), [navigation]);
+        (0, react_1.useEffect)(() => {
+            return navigation.addListener('transitionEnd', (e) => {
+                if (!e?.data?.closing) {
+                    // When navigating to a screen, remove the no animation param to re-enable animations
+                    // Otherwise the navigation back would also have no animation
+                    if ((0, navigationParams_1.hasParam)(route?.params, navigationParams_1.INTERNAL_EXPO_ROUTER_NO_ANIMATION_PARAM_NAME)) {
+                        navigation.replaceParams((0, navigationParams_1.removeParams)(route?.params, [navigationParams_1.INTERNAL_EXPO_ROUTER_NO_ANIMATION_PARAM_NAME]));
+                    }
+                }
+            });
+        }, [navigation]);
         return (<Route_1.Route node={value} route={route}>
         <react_1.default.Suspense fallback={<SuspenseFallback_1.SuspenseFallback route={value}/>}>
           <ScreenComponent {...props} 
