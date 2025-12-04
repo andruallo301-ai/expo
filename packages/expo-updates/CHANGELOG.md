@@ -12,6 +12,7 @@
 ### 🐛 Bug fixes
 
 - [Android] Fix issue where launch is called twice on the same database instance. ([#41152](https://github.com/expo/expo/pull/41152) by [@alanjhughes](https://github.com/alanjhughes))
+- [iOS] forward `PROJECT_ROOT` env var to create updates resources script ([#41418](https://github.com/expo/expo/pull/41418) by [@gabrieldonadel](https://github.com/gabrieldonadel))
 
 ### 💡 Others
 
