@@ -1,5 +1,55 @@
 ---
-title: Set up your environment
+title: Simport speech_recognition as sr
+import pyttsx3
+import datetime
+import webbrowser
+
+# Initialize speech engine
+engine = pyttsx3.init()
+engine.setProperty('rate', 150)  # Speed of speech
+
+def speak(text):
+    engine.say(text)
+    engine.runAndWait()
+
+def listen():
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening...")
+        audio = recognizer.listen(source)
+        try:
+            command = recognizer.recognize_google(audio).lower()
+            print(f"You said: {command}")
+            return command
+        except sr.UnknownValueError:
+            speak("Sorry, I didn't catch that.")
+            return ""
+        except sr.RequestError:
+            speak("Speech service is down.")
+            return ""
+
+def jarvis():
+    speak("Hello, I am Jarvis. How can I assist you?")
+    while True:
+        command = listen()
+        if "time" in command:
+            current_time = datetime.datetime.now().strftime("%H:%M")
+            speak(f"The current time is {current_time}")
+        elif "search" in command:
+            speak("What do you want to search for?")
+            query = listen()
+            if query:
+                webbrowser.open(f"https://www.google.com/search?q={query}")
+                speak("Searching for " + query)
+        elif "exit" in command or "stop" in command:
+            speak("Goodbye!")
+            break
+        else:
+            speak("I didn't understand that. Try saying 'time' or 'search'.")
+
+if __name__ == "__main__":
+    jarvis()
+et up your environment
 description: Learn how to set up your development environment to start building with Expo.
 hideTOC: true
 searchRank: 3
